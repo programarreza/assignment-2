@@ -1,13 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import orderValidationSchema from "./order.validation";
 import { successResponse } from "../../../responseController";
-import { createOrderFromDB } from "./order.service";
+import { createOrderFromDB, getOrdersFromDB } from "./order.service";
+import createError from "http-errors";
 
-const createOrder = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = req.body;
 
@@ -25,4 +22,22 @@ const createOrder = async (
   }
 };
 
-export {createOrder}
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await getOrdersFromDB();
+
+    if (!result) {
+      throw createError(404, "Orders not found ");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "All Order Retrieve successfully ",
+      data: result,
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export { createOrder, getOrders };

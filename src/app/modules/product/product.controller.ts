@@ -35,13 +35,16 @@ const createProduct = async (
 
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let query: any = {}
-    
-    if(req.query.name){
-      query.name = {$regex: new RegExp(req.query.name as string, "i")}
+    let query: any = {};
+
+    if (req.query.name) {
+      query.name = { $regex: new RegExp(req.query.name as string, "i") };
     }
 
     const result = await getProductsFromDB(query);
+    if (!result) {
+      throw createError(404, "products not found ");
+    }
 
     return successResponse(res, {
       statusCode: 200,
