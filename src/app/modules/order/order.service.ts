@@ -6,8 +6,8 @@ const createOrderFromDB = async (order: TOrder) => {
   return result;
 };
 
-const getOrdersFromDB = async () => {
-  const result = await Order.find();
+const getOrdersFromDB = async (query: any) => {
+  const result = await Order.find(query);
   return result;
 };
 
