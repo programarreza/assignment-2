@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { createProductFromDB } from "./product.service";
+import { createProductFromDB, getProductsFromDB } from "./product.service";
 import { productValidationSchema } from "./product.validation";
 import { successResponse } from "../../../responseController";
- 
+
 const createProduct = async (
   req: Request,
   res: Response,
@@ -25,4 +25,18 @@ const createProduct = async (
   }
 };
 
-export { createProduct };
+const getProducts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await getProductsFromDB();
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Products Retrieve successfully ",
+      payload: result,
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export { createProduct, getProducts };
