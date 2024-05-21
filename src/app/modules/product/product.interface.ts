@@ -1,3 +1,9 @@
+export type TResponseOption = {
+  statusCode?: number;
+  message?: string;
+  data?: any;
+};
+
 export type TVariants = {
   type: string;
   value: string;

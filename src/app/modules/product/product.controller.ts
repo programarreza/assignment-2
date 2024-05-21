@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
+import createError from "http-errors";
 import { errorResponse, successResponse } from "../../../responseController";
 import { TProduct } from "./product.interface";
-import createError from "http-errors";
 import {
   createProductFromDB,
+  deleteProductByIdFromDB,
   getProductsFromDB,
   getSingleProductByIdFromDB,
   updateProductByIdFromDB,
@@ -25,7 +26,7 @@ const createProduct = async (
     return successResponse(res, {
       statusCode: 200,
       message: "Product Created successfully ",
-      payload: result,
+      data: result,
     });
   } catch (err: any) {
     next(err);
@@ -39,7 +40,7 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
     return successResponse(res, {
       statusCode: 200,
       message: "Products Retrieve successfully ",
-      payload: result,
+      data: result,
     });
   } catch (err: any) {
     next(err);
@@ -65,7 +66,7 @@ const getSingleProductById = async (
     return successResponse(res, {
       statusCode: 200,
       message: "Single Product Retrieve successfully ",
-      payload: result,
+      data: result,
     });
   } catch (err: any) {
     next(err);
@@ -113,11 +114,39 @@ const updateProductById = async (
     return successResponse(res, {
       statusCode: 200,
       message: " Product updated successfully ",
-      payload: updatedProduct,
+      data: updatedProduct,
     });
   } catch (err: any) {
     next(err);
   }
 };
 
-export { createProduct, getProducts, getSingleProductById, updateProductById };
+const deleteProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+    const deleteProduct = await deleteProductByIdFromDB(productId);
+
+    if (!deleteProduct) {
+      throw createError(404, "product dose not exist this id");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Product Deleted successfully ",
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export {
+  createProduct,
+  deleteProductById,
+  getProducts,
+  getSingleProductById,
+  updateProductById,
+};

@@ -1,8 +1,9 @@
 import { Response } from "express";
+import { TResponseOption } from "./app/modules/product/product.interface";
 
 const errorResponse = (
   res: Response,
-  { statusCode = 500, message = "Internal Server Error" }
+  { statusCode = 500, message = "Internal Server Error" }:TResponseOption
 ) => {
   return res.status(statusCode).json({
     success: false,
@@ -12,12 +13,12 @@ const errorResponse = (
 
 const successResponse = (
   res: Response,
-  { statusCode = 200, message = "Success", payload = {} }
+  { statusCode = 200, message = "Success", data = null }: TResponseOption 
 ) => {
   return res.status(statusCode).json({
     success: true,
     message: message,
-    payload,
+    data,
   });
 };
 
