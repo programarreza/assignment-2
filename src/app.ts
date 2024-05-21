@@ -4,6 +4,7 @@ import cors from "cors";
 import productRouter from "./app/modules/product/product.router";
 import createError from "http-errors";
 import { errorResponse } from "./responseController";
+import orderRouter from "./app/modules/order/order.router";
 
 // parsers
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(cors());
 
 // routers
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRouter)
 
 app.get("/", (req: Request, res: Response) => {
   res.send("E-shop ");
