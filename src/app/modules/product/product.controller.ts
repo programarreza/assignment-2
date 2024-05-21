@@ -35,7 +35,13 @@ const createProduct = async (
 
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await getProductsFromDB();
+    let query: any = {}
+    
+    if(req.query.name){
+      query.name = {$regex: new RegExp(req.query.name as string, "i")}
+    }
+
+    const result = await getProductsFromDB(query);
 
     return successResponse(res, {
       statusCode: 200,
