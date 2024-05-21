@@ -16,4 +16,22 @@ const getSingleProductByIdFromDB = async (productId: string) => {
   return result;
 };
 
-export { createProductFromDB, getProductsFromDB, getSingleProductByIdFromDB };
+const updateProductByIdFromDB = async (
+  productId: string,
+  updateOption: object,
+  updates: Partial<TProduct>
+) => {
+  const result = await Product.findByIdAndUpdate(
+    productId,
+    updates,
+    updateOption
+  );
+  return result;
+};
+
+export {
+  createProductFromDB,
+  getProductsFromDB,
+  getSingleProductByIdFromDB,
+  updateProductByIdFromDB,
+};
