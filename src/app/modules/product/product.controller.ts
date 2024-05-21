@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { createProductFromDB, getProductsFromDB } from "./product.service";
+import { errorResponse, successResponse } from "../../../responseController";
+import {
+  createProductFromDB,
+  getProductsFromDB,
+  getSingleProductByIdFromDB,
+} from "./product.service";
 import { productValidationSchema } from "./product.validation";
-import { successResponse } from "../../../responseController";
 
 const createProduct = async (
   req: Request,
@@ -39,4 +43,31 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createProduct, getProducts };
+const getSingleProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+
+    const result = await getSingleProductByIdFromDB(productId);
+
+    if (result === null) {
+      return errorResponse(res, {
+        statusCode: 404,
+        message: "Product not found ",
+      });
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Single Product Retrieve successfully ",
+      payload: result,
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export { createProduct, getProducts, getSingleProductById };
