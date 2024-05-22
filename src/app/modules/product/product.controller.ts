@@ -36,9 +36,16 @@ const createProduct = async (
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let query = {};
+    const searchTerm = req.query.searchTerm as string;
 
-    if (req.query.name) {
-      query = { name: { $regex: new RegExp(req.query.name as string, "i") } };
+    if (searchTerm) {
+      query = {
+        $or: [
+          { name: { $regex: new RegExp(searchTerm, "i") } },
+          { description: { $regex: new RegExp(searchTerm, "i") } },
+          { category: { $regex: new RegExp(searchTerm, "i") } },
+        ],
+      };
     }
 
     const result = await getProductsFromDB(query);
