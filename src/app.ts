@@ -24,10 +24,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // server error handling all the error
-app.use((err: any, req:Request, res:Response, next:NextFunction) => {
+app.use((err: unknown, req:Request, res:Response) => {
+  const error = err as {status?: number; message?:string}
+  
   return errorResponse(res, {
-    statusCode: err.status,
-    message: err.message,
+    statusCode: error.status || 500,
+    message: error.message || "Internal server Error",
   });
 });
 

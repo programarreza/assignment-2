@@ -3,6 +3,7 @@ import { z } from "zod";
 const orderValidationSchema = z.object({
   email: z
     .string()
+    .trim()
     .email("Invalid email format")
     .min(1, "Email is required"),
   productId: z.string().min(1, "ProductId is required"),

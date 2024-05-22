@@ -14,7 +14,7 @@ async function main() {
     app.listen(config.port, () => {
       console.log(`E-shop server listening on port ${config.port}`);
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.log(error);
   }
 }

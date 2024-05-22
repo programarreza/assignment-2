@@ -61,17 +61,17 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
       message: "Order Created successfully ",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };
 
 const getOrders = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let query: any = {};
+    let query = {};
 
     if (req.query.email) {
-      query.email = { $regex: new RegExp(req.query.email as string, "i") };
+      query = { email: { $regex: new RegExp(req.query.email as string, "i") } };
     }
 
     const result = await getOrdersFromDB(query);
@@ -88,7 +88,7 @@ const getOrders = async (req: Request, res: Response, next: NextFunction) => {
       message: "Orders Retrieve successfully ",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };

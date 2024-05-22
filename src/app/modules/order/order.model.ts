@@ -5,6 +5,7 @@ const orderSchema = new Schema<TOrder>(
   {
     email: {
       type: String,
+      trim: true,
       required: [true, "email is required "],
     },
     productId: {

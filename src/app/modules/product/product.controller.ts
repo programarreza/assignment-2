@@ -28,20 +28,26 @@ const createProduct = async (
       message: "Product Created successfully ",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };
 
 const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let query: any = {};
+    let query = {};
 
     if (req.query.name) {
-      query.name = { $regex: new RegExp(req.query.name as string, "i") };
+      query = { name: { $regex: new RegExp(req.query.name as string, "i") } };
     }
 
     const result = await getProductsFromDB(query);
+    if (result.length === 0) {
+      return errorResponse(res, {
+        statusCode: 404,
+        message: "products not found",
+      });
+    }
     if (!result) {
       throw createError(404, "products not found ");
     }
@@ -51,7 +57,7 @@ const getProducts = async (req: Request, res: Response, next: NextFunction) => {
       message: "Products Retrieve successfully ",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };
@@ -77,7 +83,7 @@ const getSingleProductById = async (
       message: "Single Product Retrieve successfully ",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };
@@ -101,9 +107,9 @@ const updateProductById = async (
       "inventory",
     ];
 
-    let updates: Partial<TProduct> = {};
+    const updates: Partial<TProduct> = {};
 
-    for (let key in req.body) {
+    for (const key in req.body) {
       if (allowedUpdates.includes(key)) {
         updates[key as keyof TProduct] = req.body[key];
       } else {
@@ -125,7 +131,7 @@ const updateProductById = async (
       message: " Product updated successfully ",
       data: updatedProduct,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };
@@ -147,7 +153,7 @@ const deleteProductById = async (
       statusCode: 200,
       message: "Product Deleted successfully ",
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     next(err);
   }
 };

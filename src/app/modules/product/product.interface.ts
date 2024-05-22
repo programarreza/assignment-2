@@ -1,7 +1,7 @@
 export type TResponseOption = {
   statusCode?: number;
   message?: string;
-  data?: any;
+  data?: unknown;
 };
 
 export type TVariants = {
