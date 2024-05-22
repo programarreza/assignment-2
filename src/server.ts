@@ -6,7 +6,7 @@ async function main() {
   try {
     await mongoose.connect(config.database_url as string);
     console.log("Connection to DB Successfully");
-
+    
     mongoose.connection.on("error", (error) => {
       console.log("DB connection error:", error);
     });

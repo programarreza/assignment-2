@@ -6,8 +6,8 @@ const createProductFromDB = async (product: TProduct) => {
   return result;
 };
 
-const getProductsFromDB = async (query: any ) => {
-  const result = await Product.find(query);   
+const getProductsFromDB = async (query: Record<string, unknown>) => {
+  const result = await Product.find(query);
   return result;
 };
 
@@ -39,5 +39,5 @@ export {
   getProductsFromDB,
   getSingleProductByIdFromDB,
   updateProductByIdFromDB,
-  deleteProductByIdFromDB
+  deleteProductByIdFromDB,
 };
